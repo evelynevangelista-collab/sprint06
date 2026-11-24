@@ -50,3 +50,32 @@ formulario.addEventListener('submit', async evento => {
 });
 await atualizarMensagens();
 setInterval(atualizarMensagens, 3000);
+
+//SELEÇÃO DE ELEMENTOS DA TELA
+
+const lista = document.querySelector("#lista");
+const aviso = document.querySelector("#aviso");
+
+const form = document.querySelector("#form") || document.querySelector("#formulario");
+
+// =========================================================
+// BUSCAR MENSAGENS E LISTAR NO MEIO DA TELA
+// =========================================================
+async function carregarMensagens() {
+  try {
+    const resposta = await fetch("/mensagens");
+    if (!resposta.ok) throw new Error("Falha ao carregar mensagens");
+
+    const mensagens = await resposta.json();
+
+    lista.replaceChildren();
+
+    if (mensagens.length === 0) {
+      const itemVazio = document.createElement("li");
+      itemVazio.textContent = "Nenhuma mensagem enviada ainda. Seja o primeiro!";
+      itemVazio.style.textAlign = "center";
+      itemVazio.style.color = "#888";
+      lista.append(itemVazio);
+      return;
+    }
+  } 
